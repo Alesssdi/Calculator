@@ -3,9 +3,9 @@ const calculator = document.querySelector('.calculator');
 const copyButton = document.getElementById('copy_btn');
 
 let open_brackets = 0;
-let current_num = ''; 
-let operandStack = []; 
-let operatorStack = []; 
+let current_num = '';
+let operandStack = [];
+let operatorStack = [];
 
 
 function handleInput(value) {
@@ -16,14 +16,14 @@ function handleInput(value) {
     switch (value) {
         case 'C':
             input.value = "";
-            operandStack = []; 
+            operandStack = [];
             operatorStack = [];
-            current_num = ''; 
-            open_brackets = 0; 
+            current_num = '';
+            open_brackets = 0;
             break;
 
         case '\u2190':
-            
+
             if (input.value.slice(-1) == ')') {
                 open_brackets += 1;
             } else if (input.value.slice(-1) == '(') {
@@ -77,7 +77,7 @@ function handleInput(value) {
             break;
 
         case '(':
-            
+
             current_num = "";
             input.value += "(";
             open_brackets += 1;
@@ -119,40 +119,29 @@ function calculateResult(expression) {
             operatorStack.push(t);
         } else if (t === ')') {
             while (operatorStack[operatorStack.length - 1] !== '(') {
-                let operator = operatorStack.pop();
-                let operand2 = operandStack.pop();
-                let operand1 = operandStack.pop();
-                operandStack.push(performOperation(operand1, operand2, operator));
+                applyOperation();
             }
-            
+
             operatorStack.pop();
         } else {
             while (operatorStack.length > 0 && hasHigherPrecedence(operatorStack[operatorStack.length - 1], t)) {
-                let operator = operatorStack.pop();
-                let operand2 = operandStack.pop();
-                let operand1 = operandStack.pop();
-                operandStack.push(performOperation(operand1, operand2, operator));
+                applyOperation();
             }
             operatorStack.push(t);
         }
     }
     while (operatorStack.length > 0) {
-        let operator = operatorStack.pop();
-        let operand2 = operandStack.pop();
-        let operand1 = operandStack.pop();
-        operandStack.push(performOperation(operand1, operand2, operator));
+        applyOperation();
     }
 
-    
     return operandStack.pop();
 }
 
-
-function applyOperation(operandStack, operator) {
-    let operand2 = operandStack.shift(); 
-    let operand1 = operandStack.shift(); 
-    let result = performOperation(operand1, operand2, operator);
-    operandStack.unshift(result); 
+function applyOperation() {
+    let operator = operatorStack.pop();
+    let operand2 = operandStack.pop();
+    let operand1 = operandStack.pop();
+    operandStack.push(performOperation(operand1, operand2, operator));
 }
 
 function hasHigherPrecedence(op1, op2) {
