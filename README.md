@@ -2,7 +2,7 @@
 
 ## Description
 
-The calculator for basic arithmetic operations (+, -, ×, ÷) with support for parentheses.
+Calculator for performing basic arithmetic operations using Reverse Polish Notation (RPN)
 
 ## Features
 
